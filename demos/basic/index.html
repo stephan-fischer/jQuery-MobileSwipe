@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+  	<title>Mobile Swipe Test</title>
+
+
+  	<style>
+	  	.swipe-me {
+	  		margin-top: 1500px;
+	  		margin-bottom: 2000px;
+	  		width: 600px;
+	  		height: 200px;
+	  		background: grey;
+	  	}
+  	</style>
+	<script   src="https://code.jquery.com/jquery-3.0.0.min.js"   integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0="   crossorigin="anonymous"></script>
+	<script src="../../dist/mobileSwipe.js"></script>
+</head>
+	<body>
+		<div class="swipe-me">
+		Swipe Me
+		</div>
+		
+		<script>
+			$(function() {
+
+				console.log("online");
+				var box = $('.swipe-me');
+				console.log("BOXY", box.length);
+
+				box.MobileSwipe({
+					swipeLeft: function()
+					{
+						alert("lll left");
+					},
+					swipeRight: function()
+					{
+						alert("lll+++ rightt");
+					}
+				})
+			// do something on document ready
+			});
+		</script>
+	</body>
+</html>
