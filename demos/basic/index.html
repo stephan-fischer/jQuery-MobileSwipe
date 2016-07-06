@@ -23,20 +23,18 @@
 		</div>
 		
 		<script>
-			$(function() {
-
-				console.log("online");
+			$(function() 
+			{
+			
 				var box = $('.swipe-me');
-				console.log("BOXY", box.length);
-
 				box.MobileSwipe({
 					swipeLeft: function()
 					{
-						alert("lll left");
+						alert("left");
 					},
 					swipeRight: function()
 					{
-						alert("lll+++ rightt");
+						alert("right");
 					}
 				})
 			// do something on document ready

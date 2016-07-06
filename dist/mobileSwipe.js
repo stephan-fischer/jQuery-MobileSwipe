@@ -35,6 +35,7 @@ $.fn.MobileSwipe = function (options) {
 
     var coord = {};
     var $self = $(this);
+    var self = this;
     var swipe = {
       listen: false, // param if touch started and not ended
       active: false, // param if slide is detected and touch not stopped
@@ -60,24 +61,22 @@ $.fn.MobileSwipe = function (options) {
 
         if (Math.abs(distance.y) <= opts.threshold.y) {
           if (distance.x < -opts.threshold.x) {
-            swipe.handle(false);
+            swipe.handle(false, distance);
           } else if (distance.x > opts.threshold.x) {
-            swipe.handle(true);
+            swipe.handle(true, distance);
           }
         }
       },
       end: function end() {
-        if (!swipe.listen || !swipe.active) return;
-
         swipe.listen = false;
         swipe.active = false;
         coord = {};
       },
-      handle: function handle(left) {
+      handle: function handle(left, distance) {
         swipe.active = true;
         swipe.listen = false;
 
-        if (left == true) opts.swipeLeft();else opts.swipeRight();
+        if (left == true) opts.swipeLeft.apply(self, [distance]);else opts.swipeRight.apply(self, [distance]);
       }
     };
 
@@ -86,7 +85,7 @@ $.fn.MobileSwipe = function (options) {
     $(document).on(evtTouchEnd, swipe.end);
 
     if (touchDevice) {
-      $(document).on(evtTouchEnd, swipe.end);
+      $(document).on("touchchancel", swipe.end);
     }
   });
 };
