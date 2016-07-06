@@ -25,16 +25,45 @@ $.fn.MobileSwipe =  function(options)
 
   var opts = $.extend({}, defaults, options);
 
+  const events = {
+    touch: {
+      start:   'touchstart',
+      move:    'touchmove',
+      end:     'touchend',
+      cancel : 'touchcancel'
+    },
+    desktop: {
+      start:   'mousedown',
+      move:    'mousemove',
+      end:     'mouseup'
+    },
+    msPointer: {
+      start:   'MSPointerDown',
+      move:    'MSPointerMove',
+      end:     'MSPointerUp'
+    },
+    pointer: {
+      start:   'pointerdown',
+      move:    'pointermove',
+      end:     'pointerup'
+    }
+  };
+
   const 
-  touchDevice   = "ontouchstart" in window,
-  evtTouchStart = touchDevice ? 'touchstart' : 'mousedown',
-  evtTouchMove  = touchDevice ? 'touchmove'  : 'mousemove',
-  evtTouchEnd   = touchDevice ? 'touchend'   : 'mouseup';
+  SUPPORTS_TOUCH        = 'ontouchstart' in window,
+  SUPPORTS_MS_POINTER   = window.navigator.msPointerEnabled,
+  SUPPORTS_POINTER      = window.PointerEvent;
+
+  events.used = events.desktop;
+
+  if (SUPPORTS_TOUCH)        events.used = events.touch;
+  if (SUPPORTS_POINTER)      events.used = events.pointer;
+  if (SUPPORTS_MS_POINTER)   events.used = events.msPointer;
 
 
   var touchEvent = (event) => 
   {
-    return touchDevice ? event.touches[0] : event;
+    return SUPPORTS_TOUCH ? event.touches[0] : event;
   };
 
   return this.each(function() 
@@ -94,12 +123,12 @@ $.fn.MobileSwipe =  function(options)
     };
 
 
-    $self      .on(evtTouchStart, swipe.start);
-    $self      .on(evtTouchMove,  swipe.move);
-    $(document).on(evtTouchEnd,   swipe.end);
+    $self      .on(events.used.start, swipe.start);
+    $self      .on(events.used.move,  swipe.move);
+    $(document).on(events.used.end,   swipe.end);
 
-    if (touchDevice) {
-      $(document).on("touchchancel", swipe.end);
+    if (events.used.cancel) {
+      $(document).on(events.used.cancel, swipe.end);
     }
 
   });
